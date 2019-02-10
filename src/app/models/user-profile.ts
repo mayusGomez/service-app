@@ -27,14 +27,18 @@ export interface Adress{
 
 export interface UserProfile {
     id: string;
+    
+    // Basic Data
     email: string;
     name: string;
-    phone?: {
-        country_code: string;
-        number: string;
-    },
     gender?: Gender;
 
+    //Country Phone
+    country_phone?: string;       // ISO3 for country
+    country_code_phone?: string;  // ISO country E164
+    phone_number?: string;         
+
+    // Operation Data
     starts?: number;                     // Starts assign by thechnical staff
     completed_services?: number;         // Services completed with payment
     current_services_quote?: number;     // Services currently with quote
@@ -45,6 +49,7 @@ export interface UserProfile {
     // current_services_quote: number;
     // quote_respond_percent: number;
 
+    // Complementary Data
     address?: Adress[];
     payment_methods?: PaymentMethod[];
 }

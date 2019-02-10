@@ -1,0 +1,26 @@
+[
+    {
+        "id": "CO-VAC-001",               
+        "name": "Cali",
+        "country_id": "CO" ,      
+        "subdivision_id": "VAC" 
+    },
+    {
+        "id": "CO-DC-001",               
+        "name": "Bogota",
+        "country_id": "CO" ,      
+        "subdivision_id": "DC" 
+    },
+    {
+        "id": "GT-GU-001",               
+        "name": "Guatemala",
+        "country_id": "GT" ,      
+        "subdivision_id": "GU" 
+    },
+    {
+        "id": "GT-GU-002",               
+        "name": "Mixco",
+        "country_id": "GT" ,      
+        "subdivision_id": "GU" 
+    }
+]

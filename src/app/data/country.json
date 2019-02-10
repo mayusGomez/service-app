@@ -1,0 +1,22 @@
+[
+    {
+        "id": "CO",
+        "alpha3": "COL",
+        "order": 1,
+        "name": "Colombia",
+        "phone_code": "57",
+        "currency_code": "COP",
+        "currency_decimal": 0,
+        "time_zone_capital": "America/Bogota" 
+    },
+    {
+        "id": "GT",
+        "alpha3": "GTM",
+        "order": 0,
+        "name": "Guatemala",
+        "phone_code": "502",
+        "currency_code": "GTQ",
+        "currency_decimal": 2,
+        "time_zone_capital": "America/Guatemala" 
+    }
+]

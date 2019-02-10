@@ -4,19 +4,29 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
+
 import * as firebase from 'firebase/app';
 import { UserProfile } from '../models/user-profile';
-// import { StaffProfile } from '../models/staff-profile';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+
+  public userUid: string;
+
   constructor(
       public afAuth: AngularFireAuth,
       public fireStore: AngularFirestore
-  ) {}
+  ) {
+    this.afAuth.authState.subscribe( user =>{
+      if (user) { 
+          console.log(`constructor auth service Id auth: ${user.uid}`);
+          this.userUid = user.uid;
+      }
+    });
+  }
 
   loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
