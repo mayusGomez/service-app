@@ -15,6 +15,7 @@ import { UserProfile } from '../models/user-profile';
 export class AuthService {
 
   public userUid: string;
+  public email_verifies: boolean;
 
   constructor(
       public afAuth: AngularFireAuth,
@@ -24,6 +25,7 @@ export class AuthService {
       if (user) { 
           console.log(`constructor auth service Id auth: ${user.uid}`);
           this.userUid = user.uid;
+          this.email_verifies = user.emailVerified;
       }
     });
   }
@@ -38,6 +40,17 @@ export class AuthService {
 
   logoutUser(): Promise<void> {
     return this.afAuth.auth.signOut();
+  }
+
+  async sendEmailVerification() {
+    let user:any = firebase.auth().currentUser;
+    return await user.sendEmailVerification().then(
+      (success) => { return { 'errCode': 0, 'msg': 'Verification sended'} } 
+    ).catch(
+      (err) => {
+        return { 'errCode': 1, 'msg': err };
+      }
+    );
   }
 
   async createUser(email: string, password: string): Promise<firebase.User> {

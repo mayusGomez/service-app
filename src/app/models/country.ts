@@ -4,7 +4,8 @@ enum CountriesId {
 }
 
 export interface Citi {
-    id: string;                 
+    id: string;      
+    order: number;           
     name: string;
     country_id: string;         // ISO2
     subdivision_id: string; 

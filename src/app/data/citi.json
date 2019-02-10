@@ -1,24 +1,28 @@
 [
     {
-        "id": "CO-VAC-001",               
+        "id": "CO-VAC-001",  
+        "order": 1,             
         "name": "Cali",
         "country_id": "CO" ,      
         "subdivision_id": "VAC" 
     },
     {
-        "id": "CO-DC-001",               
+        "id": "CO-DC-001", 
+        "order": 0,                
         "name": "Bogota",
         "country_id": "CO" ,      
         "subdivision_id": "DC" 
     },
     {
-        "id": "GT-GU-001",               
+        "id": "GT-GU-001",   
+        "order": 0,              
         "name": "Guatemala",
         "country_id": "GT" ,      
         "subdivision_id": "GU" 
     },
     {
-        "id": "GT-GU-002",               
+        "id": "GT-GU-002", 
+        "order": 1,                
         "name": "Mixco",
         "country_id": "GT" ,      
         "subdivision_id": "GU" 

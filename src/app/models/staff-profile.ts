@@ -3,7 +3,8 @@ import { Adress, Gender } from './user-profile';
 export interface StaffProfile {
     id: string;
     email: string;
-    name: string;
+    first_name: string;
+    last_name: string;
     admin?: boolean;
     phone: {
         country_code: string;

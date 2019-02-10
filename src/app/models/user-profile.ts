@@ -30,8 +30,9 @@ export interface UserProfile {
     
     // Basic Data
     email: string;
-    name: string;
-    gender?: Gender;
+    first_name: string;
+    last_name: string;
+    gender: Gender;
 
     //Country Phone
     country_phone?: string;       // ISO3 for country
