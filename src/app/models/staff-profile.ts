@@ -1,7 +1,8 @@
-import { Adress, Gender } from './user-profile';
+import { Gender, Address } from './generic';
+
 
 export interface StaffProfile {
-    id: string;
+    readonly id: string;
     email: string;
     first_name: string;
     last_name: string;
@@ -22,5 +23,5 @@ export interface StaffProfile {
     // current_services_quote: number;
     // quote_respond_percent: number;
 
-    address: Adress;
+    address: Address;
 }

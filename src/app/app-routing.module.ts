@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule', canActivate:[AuthGuardService]}, 
   { path: 'auth', loadChildren: './pages/auth/auth.module#AuthPageModule'  },
   { path: 'signup', loadChildren: './pages/signup/signup.module#SignupPageModule' },
-  { path: 'user-acount', loadChildren: './pages/user-acount/user-acount.module#UserAcountPageModule', canActivate:[AuthGuardService] }
+  { path: 'user-acount', loadChildren: './pages/user-acount/user-acount.module#UserAcountPageModule', canActivate:[AuthGuardService] },
+  { path: 'user-address', loadChildren: './pages/user-address/user-address.module#UserAddressPageModule', canActivate:[AuthGuardService] }
 ];
 @NgModule({
   imports: [

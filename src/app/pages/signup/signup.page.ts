@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { FormValidations } from '../../validators/form';
 import { UserProfile } from '../../models/user-profile';
-import { Gender } from '../../models/user-profile';
+import { ResponseObject, Gender } from '../../models/generic';
 
 
 @Component({
@@ -17,7 +17,10 @@ import { Gender } from '../../models/user-profile';
 export class SignupPage implements OnInit {
 
   public signupForm: FormGroup;
-  public genderEnum: Gender;
+  readonly genderMale: number = Gender.male;
+  readonly genderFemale: number = Gender.female;
+  readonly genderOther: number = Gender.other;
+  public userProfile: UserProfile;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -33,9 +36,8 @@ export class SignupPage implements OnInit {
       gender: ['', Validators.required],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.minLength( 6 ), Validators.required])],
-      confirm_password: ['', FormValidations.areEqual('password')]
+      confirm_password: ['', Validators.compose([Validators.required,Validators.minLength( 6 ), FormValidations.areEqual('password')])]
     });
-
   }
 
   ngOnInit() {}
@@ -43,23 +45,40 @@ export class SignupPage implements OnInit {
   async signupUser(signupForm): Promise<void> {
     const loading = await this.loadingCtrl.create();
     try {
-      /*loading.present();
-      const email: string = signupForm.value.email;
-      const password: string = signupForm.value.password;
-      await this.authService.createUser(email, password);
+
+      loading.present();
+
+      this.userProfile = {
+        id: '',
+        first_name: signupForm.value.first_name,
+        last_name: signupForm.value.last_name,
+        gender: signupForm.value.gender,
+        email: signupForm.value.email
+      }
+
+      const respCreateUser: ResponseObject = await this.authService.createUser(this.userProfile, signupForm.value.password);
       await loading.dismiss();
-      this.authService.sendEmailVerification();
-      const toast = await this.toastController.create({
-        message: 'Hemos enviado un correo electrónico para validar tu cuenta, sin esta validación no es posible que solicites un servicio',
-        duration: 10000
-      });
-      toast.present();
-      this.router.navigateByUrl('/');*/
-      console.log('Genero:'+ signupForm.value.gender);
+
+      if ( respCreateUser.errCode === 0 ){
+        this.authService.sendEmailVerification();
+        const toast = await this.toastController.create({
+          message: 'Hemos enviado un correo electrónico para validar tu cuenta',
+          duration: 10000
+        });
+        toast.present();
+        this.router.navigateByUrl('/');
+      } else {
+        const toast = await this.toastController.create({
+          message: respCreateUser.errMsg,
+          duration: 10000
+        });
+        toast.present();
+      }
+
     } catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({
-        message: 'Usuario o contraseña validos',//error.message,
+        message: 'Usuario o contraseña no validos',//error.message,
         buttons: [
           {
             text: 'OK',

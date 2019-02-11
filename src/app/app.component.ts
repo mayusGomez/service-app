@@ -19,9 +19,14 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'Cuenta de usaurio',
+      title: 'Cuenta de usuario',
       url: '/user-acount',
       icon: 'contact'
+    },
+    {
+      title: 'Direcciones',
+      url: '/user-address',
+      icon: 'locate'
     }
   ];
 

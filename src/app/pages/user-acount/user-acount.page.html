@@ -13,28 +13,53 @@
     <form [formGroup]="userProfileForm">
         <ion-item>
           <ion-label position="stacked">Nombre</ion-label>
-          <ion-input [(ngModel)]="userProfileObject.name" formControlName="name" type="name" placeholder="Nombre completo"
-            [class.invalid]="!userProfileForm.controls['name'].valid && userProfileForm.controls['name'].touched">
+          <ion-input [(ngModel)]="userProfile.first_name" formControlName="first_name" type="text" placeholder="Ingrese su nombre"
+            [class.invalid]="!userProfileForm.controls['first_name'].valid && userProfileForm.controls['first_name'].touched">
           </ion-input>
         </ion-item>
-        <ion-item class="error-message" *ngIf="!userProfileForm.controls['name'].valid &&
-        userProfileForm.controls['name'].touched">
+        <ion-item class="error-message" *ngIf="!userProfileForm.controls['first_name'].valid &&
+        userProfileForm.controls['first_name'].touched">
           <ion-label>Por favor ingrese su nombre</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Apellido</ion-label>
+          <ion-input [(ngModel)]="userProfile.last_name" formControlName="last_name" type="text" placeholder="Ingrese su apellido"
+            [class.invalid]="!userProfileForm.controls['last_name'].valid && userProfileForm.controls['last_name'].touched">
+          </ion-input>
+        </ion-item>
+        <ion-item class="error-message" *ngIf="!userProfileForm.controls['last_name'].valid &&
+        userProfileForm.controls['last_name'].touched">
+          <ion-label>Por favor ingrese su apellido</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Genero</ion-label>
+          <ion-select placeholder="Seleccionar uno" formControlName="gender" type="text"  [(ngModel)]="userProfile.gender" >
+            <ion-select-option value="{{ genderFemale }}">Mujer</ion-select-option>
+            <ion-select-option value="{{ genderMale }}">Hombre</ion-select-option>
+            <ion-select-option value="{{ genderOther }}">Otro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item class="error-message" *ngIf="!userProfileForm.controls['gender'].valid &&
+        userProfileForm.controls['gender'].touched">
+          <ion-label>Por favor seleccione su género</ion-label>
         </ion-item>
     
         <ion-item>
           <ion-label position="stacked">Email</ion-label>
-          <ion-input [(ngModel)]="userProfileObject.email" formControlName="email" type="email" placeholder="Correo electrónico"
+          <ion-input [(ngModel)]="userProfile.email" formControlName="email" type="email" placeholder="Correo electrónico"
             [class.invalid]="!userProfileForm.controls['email'].valid&& userProfileForm.controls['email'].touched">
           </ion-input>
         </ion-item>
-        <ion-item class="error-message" *ngIf="!userProfileForm.controls['email'].valid
-            && userProfileForm.controls['email'].touched">
-          <ion-label>Your password needs more than 6 characters.</ion-label>
-        </ion-item>
     
-        <ion-button (click)="saveUserProfile()" expand="block" [disabled]="!userProfileForm.valid">
+        <ion-button (click)="updateUserProfile()" expand="block" [disabled]="!userProfileForm.valid">
           Modificar
         </ion-button>
+        <ion-button (click)="verifyEmail()" expand="block" [disabled]="email_verified">
+          Verificar Correo
+        </ion-button>
+        
+
       </form>
 </ion-content>

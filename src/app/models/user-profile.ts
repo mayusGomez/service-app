@@ -1,29 +1,4 @@
-export enum Gender {
-    male = 0,
-    female = 1,
-    other = 2
-}
-
-export enum PaymentType {
-    credict_card=0
-}
-
-export interface PaymentMethod{
-    type: PaymentType;
-    last_numbers: number;
-    token: string;
-}
-
-export interface Adress{
-    country: string;  // ISO3 COuntry code
-    state: string;
-    citi: string;
-    description: string;
-    citi_zone: string;
-    geolocation: object;
-    name: string;
-}
-
+import { PaymentMethod, Gender, Address } from './generic';
 
 export interface UserProfile {
     id: string;
@@ -51,6 +26,6 @@ export interface UserProfile {
     // quote_respond_percent: number;
 
     // Complementary Data
-    address?: Adress[];
+    address?: Address[];
     payment_methods?: PaymentMethod[];
 }

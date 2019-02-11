@@ -7,6 +7,7 @@ import {
 
 import * as firebase from 'firebase/app';
 import { UserProfile } from '../models/user-profile';
+import { ResponseObject } from '../models/generic';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ import { UserProfile } from '../models/user-profile';
 export class AuthService {
 
   public userUid: string;
-  public email_verifies: boolean;
+  public email_verified: boolean=false;
 
   constructor(
       public afAuth: AngularFireAuth,
@@ -25,7 +26,7 @@ export class AuthService {
       if (user) { 
           console.log(`constructor auth service Id auth: ${user.uid}`);
           this.userUid = user.uid;
-          this.email_verifies = user.emailVerified;
+          this.email_verified = user.emailVerified;
       }
     });
   }
@@ -53,24 +54,51 @@ export class AuthService {
     );
   }
 
-  async createUser(email: string, password: string): Promise<firebase.User> {
+  emailIsVerified(){
+    return this.email_verified;
+  }
+
+  async createUser(userProfile: UserProfile, password: string): Promise<ResponseObject> {
+    
+    let resp : ResponseObject = {
+      object: null,
+      errCode: 0,
+      errMsg: ''
+    };
+
     try{
+      console.log('Inicia');
       const userCredential: firebase.auth.UserCredential = await this.afAuth.auth.createUserWithEmailAndPassword(
-        email,
+        userProfile.email,
         password
       );
+      console.log('sgte');
 
+      userProfile.id = userCredential.user.uid;
+      console.log('a');
+      
       const userProfileDoc: AngularFirestoreDocument<UserProfile> = this.fireStore.doc(`userProfile/${userCredential.user.uid}`);
       await userProfileDoc.set({
-        id: userCredential.user.uid,
-        name: userCredential.user.displayName,
-        email: email
+        ...userProfile
       });
 
-      return userCredential.user;
+      resp['userCredential'] = userCredential.user;
+
+      return resp;
 
     }catch (err){
+      console.log('error al crear cuenta');
       console.log(err);
+      if (err.code === "auth/email-already-in-use"){
+        resp['errCode'] = 1;
+        resp['errMsg'] = 'El usuario ya posee una cuenta en el sistema';
+      } else {
+        resp['errCode'] =-1;
+        resp['errMsg'] = err.message;
+      }
+      
+      return resp;
+      
       // TODO: Registrar error
     }
   }
