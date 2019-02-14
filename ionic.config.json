@@ -1,6 +1,8 @@
 {
   "name": "service-app",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "132ccb33"
 }

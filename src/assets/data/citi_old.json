@@ -1,12 +1,31 @@
 [
     {
+        "id": "CO-VAC-001",  
+        "order": 1,             
+        "name": "Cali",
+        "country_name": "Colombia",
+        "country_id": "CO" ,      
+        "subdivision_id": "VAC" ,
+        "lat": 3.3950619,
+        "lon": -76.5957046
+    },
+    {
+        "id": "CO-DC-001", 
+        "order": 0,                
+        "name": "Bogota",
+        "country_name": "Colombia",
+        "country_id": "CO" ,      
+        "subdivision_id": "DC" ,
+        "lat": 4.6656865,
+        "lon": -74.0977007
+    },
+    {
         "id": "GT-GU-001",   
         "order": 0,              
         "name": "Guatemala",
         "country_name": "Guatemala",
         "country_id": "GT" ,      
         "subdivision_id": "GU" ,
-        "subdivision_name": "Guatemala",
         "lat": 14.6289403,
         "lon": -90.5142701
     },
@@ -17,7 +36,6 @@
         "country_name": "Guatemala",
         "country_id": "GT" ,      
         "subdivision_id": "GU" ,
-        "subdivision_name": "Guatemala",
         "lat": 14.6299121,
         "lon": -90.6054335
     }

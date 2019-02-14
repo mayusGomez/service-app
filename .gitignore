@@ -29,8 +29,11 @@ plugins/android.json
 plugins/ios.json
 $RECYCLE.BIN/
 
+**/secrets.ts
+src/index.html
+
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-**/secrets.ts
+

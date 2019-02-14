@@ -20,10 +20,13 @@ export interface PaymentMethod{
     token: string;
 }
 
-export interface Address{
-    country: string;  // ISO3 COuntry code
-    state: string;
-    citi: string;
+export interface Address {
+    country_id: string;  // ISO3 COuntry code
+    country_name: string;
+    subdivision_id: string;
+    subdivision_name: string;
+    citi_id: string;
+    citi_name: string;
     description: string;
     citi_zone: string;
     geolocation: object;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import cities from '../../../assets/data/citi.json';
-import { Citi } from '../../models/country';
+import { Citi } from '../../models/citi';
 
 @Component({
   selector: 'citi-list',
@@ -12,13 +12,13 @@ export class CitiList implements OnInit {
 
   citiesList: Citi[] = cities;
 
-  constructor() { 
-      for (let citi of this.citiesList){
-        console.log('Cities:' + citi.name  );
-      }
-   }
+  constructor() { }
 
   ngOnInit() {
+  }
+
+  citiSelected(citi: any){
+    console.log(citi);
   }
 
 }
