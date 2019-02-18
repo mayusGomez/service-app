@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <ion-back-button defaultHref="/user-address/cities"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+        Direccion
+      </ion-title>
+    </ion-toolbar>
+    
+    <ion-searchbar animation [(ngModel)]="search_value" type="search" placeholder="Ingrese su dirección" 
+        debounce="1500" (search)="searchByKeyword($event)" (ionChange)="searchPlace()">
+    </ion-searchbar>
+    <ion-list>
+        <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.formatted_address}}</ion-item>
+    </ion-list>
+    
+</ion-header>
+
+<!-- 
+<ion-content padding>
+    
+    <ion-list>
+        <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.description}}</ion-item>
+    </ion-list>
+</ion-content>
+-->
+<ion-content class="map-page">
+    <div style="height: 100%; width: 100%" #mapCanvas id="map_canvas"></div>
+</ion-content>
+

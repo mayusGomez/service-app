@@ -27,8 +27,11 @@ export interface Address {
     subdivision_name: string;
     citi_id: string;
     citi_name: string;
-    description: string;
-    citi_zone: string;
-    geolocation: object;
-    name: string;
+    description?: string;
+    citi_zone?: string;
+    geolocation?: {
+        lat: number,
+        lng: number
+    };
+    name?: string;
 }
