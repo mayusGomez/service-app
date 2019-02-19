@@ -28,6 +28,7 @@ export interface Address {
     citi_id: string;
     citi_name: string;
     description?: string;
+    detail?: string;
     citi_zone?: string;
     geolocation?: {
         lat: number,

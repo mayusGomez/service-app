@@ -1,4 +1,4 @@
-export interface Citi {
+export interface City {
     id: string;      
     order: number;           
     name: string;
@@ -6,4 +6,8 @@ export interface Citi {
     country_name: string;
     subdivision_id: string; 
     subdivision_name: string;
+    center_point: {
+        lat: number,
+        lng: number
+    }
 }

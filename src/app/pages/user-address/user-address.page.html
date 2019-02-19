@@ -10,11 +10,10 @@
 </ion-header>
 
 <ion-content padding>
-
-  <ion-button routerLink="/user-address/cities" expand="block">
+  <ion-button routerLink="/user-address/add-address" expand="block">
     Agregar Dirección
   </ion-button>
-
+  <br>
   <ion-card *ngFor="let address of userProfile.address">
     <ion-card-header>
       <ion-card-subtitle>{{ address.country_name }} - {{ address.citi_name }}</ion-card-subtitle>

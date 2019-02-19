@@ -1,31 +1,77 @@
 <ion-header>
     <ion-toolbar color="primary">
       <ion-buttons slot="start">
-          <ion-back-button defaultHref="/user-address/cities"></ion-back-button>
+          <ion-back-button defaultHref="/user-address"></ion-back-button>
       </ion-buttons>
       <ion-title>
-        Direccion
+        Agregar Direccion
       </ion-title>
     </ion-toolbar>
-    
-    <ion-searchbar animation [(ngModel)]="search_value" type="search" placeholder="Ingrese su dirección" 
-        debounce="1500" (search)="searchByKeyword($event)" (ionChange)="searchPlace()">
-    </ion-searchbar>
-    <ion-list>
-        <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.formatted_address}}</ion-item>
-    </ion-list>
-    
+    <!-- 
+    <div *ngIf="showMap">
+        <ion-searchbar animation [(ngModel)]="search_value" type="search" placeholder="Ingrese su dirección" 
+            debounce="1500" (search)="searchByKeyword($event)" (ionChange)="searchPlace()">
+        </ion-searchbar>
+        <ion-list *ngIf="places && places.length > 0">
+            <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.formatted_address}}</ion-item>
+        </ion-list>
+    </div>
+    -->
 </ion-header>
 
-<!-- 
-<ion-content padding>
-    
+<ion-content *ngIf="showCityList">
     <ion-list>
-        <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.description}}</ion-item>
+        <ion-item *ngFor="let city of citiesList | async">
+            <ion-label (click)="setCity(city)"> {{ city.name }} </ion-label>
+        </ion-item>
     </ion-list>
 </ion-content>
--->
-<ion-content class="map-page">
-    <div style="height: 100%; width: 100%" #mapCanvas id="map_canvas"></div>
+
+<ion-content *ngIf="showAdress">
+    <br>
+    <br>
+    <br>
+    <form [formGroup]="addressForm">
+        <ion-item>
+            <ion-label position="stacked">Direccion</ion-label>
+                <ion-input formControlName="address" type="text" placeholder="Ingrese su dirección" [(ngModel)]="search_value" 
+                    debounce="1500" (ionChange)="searchPlace()" (keyup.enter)="searchByKeyword($event)"
+                    [class.invalid]="!addressForm.controls['address'].valid && addressForm.controls['address'].touched" text-wrap>
+                </ion-input>
+            </ion-item>
+            <ion-item class="error-message" *ngIf="!addressForm.controls['address'].valid &&
+                    addressForm.controls['address'].touched">
+            <ion-label>Por favor ingrese su dirección</ion-label>
+        </ion-item>
+        <ion-list *ngIf="places && places.length > 0">
+                <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)" color="medium" >
+                    {{place.formatted_address}}
+                </ion-item>
+        </ion-list>
+        <br>
+        <ion-item *ngIf="showAddressDetailField" >
+            <ion-label position="stacked">Complemento Dirección</ion-label>
+                <ion-input formControlName="detail" type="text" placeholder="Apartamento/Piso/Edificio" [(ngModel)]="address.detail"
+                    [class.invalid]="!addressForm.controls['detail'].valid && addressForm.controls['detail'].touched">
+                </ion-input>
+            </ion-item>
+            <ion-item class="error-message" *ngIf="!addressForm.controls['detail'].valid &&
+                    addressForm.controls['detail'].touched">
+            <ion-label>Por favor ingrese su dirección</ion-label>
+        </ion-item>
+        <br>
+        <ion-button *ngIf="showAddressDetailField" (click)="setAddress()" expand="block" [disabled]="!addressForm.valid">
+            Continuar
+        </ion-button>
+    </form>
 </ion-content>
 
+<ion-content  class="map-page">
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="showMap">
+        <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <div style="height: 100%; width: 100%" #mapCanvas id="map_canvas">
+    </div>
+</ion-content>

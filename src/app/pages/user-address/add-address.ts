@@ -1,9 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone  } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Address } from '../../models/generic';
+import { City } from '../../models/city';
+import { CityService } from '../../services/city.service';
 
 declare var google: any;
+enum ViewOptionEnum {
+    city_list=0,
+    address=1,
+    map=2
+};
 
 @Component({
   selector: 'add-address',
@@ -13,9 +22,24 @@ declare var google: any;
 export class AddAddress implements OnInit {
 
     @ViewChild('mapCanvas') mapElement: ElementRef;
+    public addressForm: FormGroup;
+
+    citiesList: Observable<City[]>;
+    countryId: string = 'GT';
+    citySelected: City;
+
+    viewOption: ViewOptionEnum;
+    showCityList: boolean;
+    showAdress: boolean;
+    showMap: boolean;
+    
+    showAddressDetailField: boolean;
+
+    mapMarker: any;
 
     placesService: any;
     search_value:string;
+    last_search_value: string;
     places: any = [];
     searchDisabled: boolean;
     saveDisabled: boolean;
@@ -24,146 +48,168 @@ export class AddAddress implements OnInit {
 
     constructor(
         private router: Router ,
-        public activatedRoute: ActivatedRoute,
-        public zone: NgZone
-    ) { 
-        this.address = {
-            country_id: 'CO',
-            country_name: 'Colombia',
-            subdivision_id: 'xxx',
-            subdivision_name: 'xxxx',
-            citi_id: 'xxxx',
-            citi_name: 'yyy'
-        }
-        let x = activatedRoute.snapshot.params;
+        public zone: NgZone,
+        public cityService: CityService,
+        public formBuilder: FormBuilder,
+    ){ 
+        this.showCityList = true;
+        this.showAdress= false;
+        this.showMap = false;
 
-        activatedRoute.queryParams.subscribe(params => {
-            //this.currency = JSON.parse(params["currency"]);
-            console.log(`citi: ${params["city"]}`)
+        this.showAddressDetailField = false;
+
+        this.addressForm = this.formBuilder.group({
+            address: ['', Validators.required],
+            detail: ['', Validators.required]
         });
+    }
 
-        console.log('params:'+  JSON.stringify(x.citi)  );
+    toggleView(option:ViewOptionEnum){
+        switch(option) { 
+            case ViewOptionEnum.address:{
+                this.showCityList = false;
+                this.showAdress= true;
+                this.showMap = false;
+                break;
+            }
+            case ViewOptionEnum.map:{
+                this.showCityList = false;
+                this.showAdress= false;
+                this.showMap = true;
+                break;
+            }
+            default:{
+                this.showCityList = true;
+                this.showAdress= false;
+                this.showMap = false;
+                break;
+            }
+        }
     }
 
     ngOnInit() {
+        this.citiesList = this.cityService.getCities(this.countryId);
+    }
+
+    setCity(city: City){
+        this.citySelected = city;
+        this.toggleView( ViewOptionEnum.address );
+        this.address = {
+            citi_id: this.citySelected.id,
+            citi_name: this.citySelected.name,
+            country_id: this.citySelected.country_id,
+            country_name: this.citySelected.country_name,
+            subdivision_id: this.citySelected.subdivision_id,
+            subdivision_name: this.citySelected.subdivision_name,
+            geolocation: {
+                lat: null,
+                lng: null
+            }
+        }
+        this.loadMap();
+    }
+
+    loadMap(){
         this.map = new google.maps.Map(this.mapElement.nativeElement, {
-            center: new google.maps.LatLng(3.4353942, -76.5270954),
+            center: new google.maps.LatLng( this.citySelected.center_point.lat , this.citySelected.center_point.lng),
             zoom: 12,
             mapTypeControlOptions: {
                 mapTypeIds: ['coordinate'],
             },
             streetViewControl: false,
         });
-
-        //this.autocompleteService = new google.maps.places.AutocompleteService();
         this.placesService = new google.maps.places.PlacesService(this.map);
     }
 
     selectPlace(place: any){
-
         this.places = [];
         this.search_value = place.formatted_address;
-
-        console.log('place:' + JSON.stringify(place));
+        this.last_search_value = this.search_value;
+        this.showAddressDetailField = true;
 
         this.map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}); 
 
+        this.address.geolocation['lat'] = place.geometry.location.lat();
+        this.address.geolocation['lng'] = place.geometry.location.lng();
 
-        /*this.placesService.getDetails({placeId: place.place_id}, (details) => {
+        this.map.setZoom(15);
+        this.mapMarker = new google.maps.Marker({
+            position: {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng()
+            },
+            animation: google.maps.Animation.DROP,
+            draggable:true,
+            map: this.map
+        });
 
-            this.zone.run(() => {
-
-                location.name = details.name;
-                location.lat = details.geometry.location.lat();
-                location.lng = details.geometry.location.lng();
-                this.saveDisabled = false;
-
-                this.map.setCenter({lat: location.lat, lng: location.lng}); 
-
-                //this.location = location;
-
+        this.map.addListener('click', (event) => {
+            this.mapMarker.setMap(null);
+            this.mapMarker = new google.maps.Marker({
+                position: event.latLng,
+                map: this.map,
+                animation: google.maps.Animation.DROP,
+                draggable:true
             });
-
-        });*/
-
+            console.log('event click');
+            this.address.geolocation.lat = event.latLng.lat;
+            this.address.geolocation.lng = event.latLng.lng;
+        });
+        this.map.addListener('touchstart', (event)=> {
+            this.mapMarker.setMap(null);
+            this.mapMarker = new google.maps.Marker({
+                position: event.latLng,
+                map: this.map,
+                animation: google.maps.Animation.DROP,
+                draggable:true
+            });
+            console.log('event touchstart');
+            this.address.geolocation.lat = event.latLng.lat;
+            this.address.geolocation.lng = event.latLng.lng;
+        });
     }
 
     searchByKeyword(x: any){
         console.log('searchByKeyword:'+ x);
+        this.showAddressDetailField = true;
         this.places = [];
     }
 
     searchPlace (){
-        console.log('searchPlace...');
-        
+        console.log('searchPlace');
+        if (this.last_search_value === this.search_value){
+            this.places = [];
+            return;
+        }
 
-        if(this.search_value.length > 0 ) {
+        this.showAddressDetailField = false;
+
+        if(this.search_value && this.search_value.length > 0 ) {
             let request = {
-                query: `${this.search_value}, Cali`,
+                query: `${this.search_value} ,${this.citySelected.name}, ${this.citySelected.subdivision_name}`,
                 fields: ['name', 'geometry','formatted_address'],
             };
-            console.log('service');
-            console.log(`this.search_value: ${this.search_value}`);
-
-            console.log('find place');
+            this.last_search_value = this.search_value;
             this.placesService.findPlaceFromQuery(request, (results, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-
-                this.zone.run(() => {
-                    this.places = results;
-                    console.log('results');
-                });
-                
-            }
-            else{
-                console.log('Places No OK');
-            }
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    this.zone.run(() => {
+                        this.places = results;
+                    });
+                }
+                else{
+                    console.log('Places No OK');
+                }
             });
-
         } else{
             this.places = [];
         }
-
     }
 
-    searchPlaceOld(){
-
-        /*console.log('searchPlace:');
-        this.saveDisabled = true;
-
-        if(this.search_value.length > 0 //&& !this.searchDisabled
-            ) {
-
-            const bounds = new google.maps.LatLngBounds(
-                new google.maps.LatLng(3.505554, -76.46082489999999),
-                new google.maps.LatLng(3.2845748, -76.590503));
-
-            let config = {
-                //types: ['geocode'],
-                input: this.search_value,
-                componentRestrictions: { country: 'co'},
-                //bounds: bounds
-            }
-
-            this.autocompleteService.getPlacePredictions(config, (predictions, status) => {
-
-                if(status == google.maps.places.PlacesServiceStatus.OK && predictions){
-
-                    this.places = [];
-
-                    predictions.forEach((prediction) => {
-                        this.places.push(prediction);
-                    });
-                }
-
-            });
-
-        } else {
-            this.places = [];
-        }
-
-        console.log('places:' + this.places);*/
-
+    setAddress(){
+        this.address.description = this.search_value;
+        this.toggleView(ViewOptionEnum.map);
+        console.log(this.mapMarker);
+        console.log(`Direccion: ${ JSON.stringify(this.address)}`);
     }
 
 }

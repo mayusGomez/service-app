@@ -1,0 +1,54 @@
+[
+    {
+        "id": "CO-VAC-001",  
+        "order": 1,             
+        "name": "Cali",
+        "country_name": "Colombia",
+        "country_id": "CO" ,      
+        "subdivision_id": "VAC" ,
+        "subdivision_name": "Valle del Cauca",
+        "center_point":{
+            "lat": 3.3950619,
+            "lng": -76.5957046
+        }   
+    },
+    {
+        "id": "CO-DC-001", 
+        "order": 0,                
+        "name": "Bogota",
+        "country_name": "Colombia",
+        "country_id": "CO" ,      
+        "subdivision_id": "DC" ,
+        "subdivision_name": "Distrito Capital",
+        "center_point":{
+            "lat": 4.6656865,
+            "lng": -74.0977007
+        }
+    },
+    {
+        "id": "GT-GU-001",   
+        "order": 0,              
+        "name": "Guatemala",
+        "country_name": "Guatemala",
+        "country_id": "GT" ,      
+        "subdivision_id": "GU" ,
+        "subdivision_name": "Guatemala",
+        "center_point":{
+            "lat": 14.6289403,
+            "lng": -90.5142701
+        }
+    },
+    {
+        "id": "GT-GU-002", 
+        "order": 1,                
+        "name": "Mixco",
+        "country_name": "Guatemala",
+        "country_id": "GT" ,      
+        "subdivision_id": "GU" ,
+        "subdivision_name": "Guatemala",
+        "center_point":{
+            "lat": 14.6299121,
+            "lng": -90.6054335
+        }
+    }
+]
