@@ -35,7 +35,7 @@
         <ion-item>
             <ion-label position="stacked">Direccion</ion-label>
                 <ion-input formControlName="address" type="text" placeholder="Ingrese su dirección" [(ngModel)]="search_value" 
-                    debounce="1500" (ionChange)="searchPlace()" (keyup.enter)="searchByKeyword($event)"
+                    debounce="1500" (ionChange)="searchPlace()"
                     [class.invalid]="!addressForm.controls['address'].valid && addressForm.controls['address'].touched" text-wrap>
                 </ion-input>
             </ion-item>

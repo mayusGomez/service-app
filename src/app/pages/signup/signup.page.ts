@@ -36,7 +36,7 @@ export class SignupPage implements OnInit {
       gender: ['', Validators.required],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.minLength( 6 ), Validators.required])],
-      confirm_password: ['', Validators.compose([Validators.required,Validators.minLength( 6 ), FormValidations.areEqual('password')])]
+      confirm_password: ['', Validators.compose([Validators.required, Validators.minLength( 6 ), FormValidations.areEqual('password')])]
     });
   }
 
@@ -54,12 +54,12 @@ export class SignupPage implements OnInit {
         last_name: signupForm.value.last_name,
         gender: signupForm.value.gender,
         email: signupForm.value.email
-      }
+      };
 
       const respCreateUser: ResponseObject = await this.authService.createUser(this.userProfile, signupForm.value.password);
       await loading.dismiss();
 
-      if ( respCreateUser.errCode === 0 ){
+      if ( respCreateUser.errCode === 0 ) {
         this.authService.sendEmailVerification();
         const toast = await this.toastController.create({
           message: 'Hemos enviado un correo electrónico para validar tu cuenta',
@@ -78,7 +78,7 @@ export class SignupPage implements OnInit {
     } catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({
-        message: 'Usuario o contraseña no validos',//error.message,
+        message: 'Usuario o contraseña no validos', // error.message,
         buttons: [
           {
             text: 'OK',

@@ -1,7 +1,7 @@
 export interface ResponseObject {
-    object: any,
-    errCode: number,
-    errMsg: string
+    object: any;
+    errCode: number;
+    errMsg: string;
 }
 
 export enum Gender {
@@ -11,10 +11,10 @@ export enum Gender {
 }
 
 export enum PaymentType {
-    credict_card=0
+    credict_card= 0
 }
 
-export interface PaymentMethod{
+export interface PaymentMethod {
     type: PaymentType;
     last_numbers: number;
     token: string;

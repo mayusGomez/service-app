@@ -16,7 +16,7 @@ export class AuthPage implements OnInit {
     private alertCtrl: AlertController,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router 
+    private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],

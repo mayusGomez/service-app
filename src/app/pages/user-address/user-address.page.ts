@@ -16,23 +16,23 @@ export class UserAddressPage implements OnInit, OnDestroy {
 
   constructor(
     private userDataServices: UserDataService
-  ) { 
+  ) {
     this.userProfile = {
       email: '',
       id: '',
       first_name: '',
       last_name: '',
       gender: null
-    }
+    };
   }
 
   ngOnInit() {
-    this.userProfileSubs$ = this.userDataServices.getUserProfile().subscribe( userProf =>{
+    this.userProfileSubs$ = this.userDataServices.getUserProfile().subscribe( userProf => {
       this.userProfile = userProf;
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.userProfileSubs$.unsubscribe();
   }
 

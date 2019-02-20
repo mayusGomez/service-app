@@ -9,7 +9,7 @@ export interface Country {
     order: number;
     name: string;
     phone_code: string;         // E164
-    currency_code: string;  
-    currency_decimal: number;       
-    time_zone_capital: string;  
+    currency_code: string;
+    currency_decimal: number;
+    time_zone_capital: string;
 }

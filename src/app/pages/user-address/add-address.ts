@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone  } from '@angular/core
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
 
 import { Address } from '../../models/generic';
 import { City } from '../../models/city';
@@ -9,10 +10,10 @@ import { CityService } from '../../services/city.service';
 
 declare var google: any;
 enum ViewOptionEnum {
-    city_list=0,
-    address=1,
-    map=2
-};
+    city_list= 0,
+    address= 1,
+    map= 2
+}
 
 @Component({
   selector: 'add-address',
@@ -25,20 +26,19 @@ export class AddAddress implements OnInit {
     public addressForm: FormGroup;
 
     citiesList: Observable<City[]>;
-    countryId: string = 'GT';
+    countryId = 'GT';
     citySelected: City;
 
     viewOption: ViewOptionEnum;
     showCityList: boolean;
     showAdress: boolean;
     showMap: boolean;
-    
     showAddressDetailField: boolean;
 
     mapMarker: any;
 
     placesService: any;
-    search_value:string;
+    search_value: string;
     last_search_value: string;
     places: any = [];
     searchDisabled: boolean;
@@ -51,9 +51,10 @@ export class AddAddress implements OnInit {
         public zone: NgZone,
         public cityService: CityService,
         public formBuilder: FormBuilder,
-    ){ 
+        public alertController: AlertController
+    ) {
         this.showCityList = true;
-        this.showAdress= false;
+        this.showAdress = false;
         this.showMap = false;
 
         this.showAddressDetailField = false;
@@ -64,23 +65,23 @@ export class AddAddress implements OnInit {
         });
     }
 
-    toggleView(option:ViewOptionEnum){
-        switch(option) { 
-            case ViewOptionEnum.address:{
+    toggleView(option: ViewOptionEnum) {
+        switch (option) {
+            case ViewOptionEnum.address: {
                 this.showCityList = false;
-                this.showAdress= true;
+                this.showAdress = true;
                 this.showMap = false;
                 break;
             }
-            case ViewOptionEnum.map:{
+            case ViewOptionEnum.map: {
                 this.showCityList = false;
-                this.showAdress= false;
+                this.showAdress = false;
                 this.showMap = true;
                 break;
             }
-            default:{
+            default: {
                 this.showCityList = true;
-                this.showAdress= false;
+                this.showAdress = false;
                 this.showMap = false;
                 break;
             }
@@ -91,7 +92,7 @@ export class AddAddress implements OnInit {
         this.citiesList = this.cityService.getCities(this.countryId);
     }
 
-    setCity(city: City){
+    setCity(city: City) {
         this.citySelected = city;
         this.toggleView( ViewOptionEnum.address );
         this.address = {
@@ -105,11 +106,11 @@ export class AddAddress implements OnInit {
                 lat: null,
                 lng: null
             }
-        }
+        };
         this.loadMap();
     }
 
-    loadMap(){
+    loadMap() {
         this.map = new google.maps.Map(this.mapElement.nativeElement, {
             center: new google.maps.LatLng( this.citySelected.center_point.lat , this.citySelected.center_point.lng),
             zoom: 12,
@@ -121,13 +122,13 @@ export class AddAddress implements OnInit {
         this.placesService = new google.maps.places.PlacesService(this.map);
     }
 
-    selectPlace(place: any){
+    selectPlace(place: any) {
         this.places = [];
         this.search_value = place.formatted_address;
         this.last_search_value = this.search_value;
         this.showAddressDetailField = true;
 
-        this.map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}); 
+        this.map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
 
         this.address.geolocation['lat'] = place.geometry.location.lat();
         this.address.geolocation['lng'] = place.geometry.location.lng();
@@ -139,7 +140,7 @@ export class AddAddress implements OnInit {
                 lng: place.geometry.location.lng()
             },
             animation: google.maps.Animation.DROP,
-            draggable:true,
+            draggable: true,
             map: this.map
         });
 
@@ -149,45 +150,39 @@ export class AddAddress implements OnInit {
                 position: event.latLng,
                 map: this.map,
                 animation: google.maps.Animation.DROP,
-                draggable:true
+                draggable: true
             });
-            console.log('event click');
+            // console.log('event click');
             this.address.geolocation.lat = event.latLng.lat;
             this.address.geolocation.lng = event.latLng.lng;
         });
-        this.map.addListener('touchstart', (event)=> {
-            this.mapMarker.setMap(null);
-            this.mapMarker = new google.maps.Marker({
-                position: event.latLng,
-                map: this.map,
-                animation: google.maps.Animation.DROP,
-                draggable:true
-            });
-            console.log('event touchstart');
-            this.address.geolocation.lat = event.latLng.lat;
-            this.address.geolocation.lng = event.latLng.lng;
-        });
+        // this.map.addListener('touchstart', (event) => {
+        //     this.mapMarker.setMap(null);
+        //     this.mapMarker = new google.maps.Marker({
+        //         position: event.latLng,
+        //         map: this.map,
+        //         animation: google.maps.Animation.DROP,
+        //         draggable: true
+        //     });
+        //     // console.log('event touchstart');
+        //     this.address.geolocation.lat = event.latLng.lat;
+        //     this.address.geolocation.lng = event.latLng.lng;
+        // });
     }
 
-    searchByKeyword(x: any){
-        console.log('searchByKeyword:'+ x);
-        this.showAddressDetailField = true;
-        this.places = [];
-    }
-
-    searchPlace (){
+    searchPlace () {
         console.log('searchPlace');
-        if (this.last_search_value === this.search_value){
+        if (this.last_search_value === this.search_value) {
             this.places = [];
             return;
         }
 
         this.showAddressDetailField = false;
 
-        if(this.search_value && this.search_value.length > 0 ) {
-            let request = {
+        if (this.search_value && this.search_value.length > 0 ) {
+            const request = {
                 query: `${this.search_value} ,${this.citySelected.name}, ${this.citySelected.subdivision_name}`,
-                fields: ['name', 'geometry','formatted_address'],
+                fields: ['name', 'geometry', 'formatted_address'],
             };
             this.last_search_value = this.search_value;
             this.placesService.findPlaceFromQuery(request, (results, status) => {
@@ -195,21 +190,31 @@ export class AddAddress implements OnInit {
                     this.zone.run(() => {
                         this.places = results;
                     });
-                }
-                else{
+                } else {
                     console.log('Places No OK');
                 }
             });
-        } else{
+        } else {
             this.places = [];
         }
     }
 
-    setAddress(){
+    setAddress() {
         this.address.description = this.search_value;
         this.toggleView(ViewOptionEnum.map);
-        console.log(this.mapMarker);
-        console.log(`Direccion: ${ JSON.stringify(this.address)}`);
+        // console.log(this.mapMarker);
+        // console.log(`Direccion: ${ JSON.stringify(this.address)}`);
+        this.presentAlert();
+    }
+
+    async presentAlert() {
+        const alert = await this.alertController.create({
+            header: 'Atención',
+            subHeader: 'Definir posición Geográfica',
+            message: 'Por favor confirme la posición geográfica de la dirección ingresada',
+            buttons: ['OK']
+        });
+        await alert.present();
     }
 
 }
