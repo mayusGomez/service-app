@@ -10,8 +10,8 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button routerLink="/user-address/add-address" expand="block">
-    Agregar Dirección
+  <ion-button color="secondary" shape="round" expand="block" (click)="addAddress()">
+    Agregar Nueva Dirección
   </ion-button>
   <br>
   <ion-card *ngFor="let address of userProfile.address">

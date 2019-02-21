@@ -1,22 +1,23 @@
 <ion-header>
     <ion-toolbar color="primary">
-      <ion-buttons slot="start">
-          <ion-back-button defaultHref="/user-address"></ion-back-button>
-      </ion-buttons>
-      <ion-title>
-        Agregar Direccion
-      </ion-title>
+        <ion-button slot="start" *ngIf="!showMap" (click)="exitWithoutSave()" clear>
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+        <ion-button slot="start" (click)="saveAddres()" *ngIf="showMap" color="light" icon-only>
+            <ion-icon name="bookmark"></ion-icon>
+        </ion-button>
+
+        <ion-title *ngIf="showCityList">
+            Seleccione ciudad
+        </ion-title>
+        <ion-title *ngIf="showAdress">
+            Ingrese direccion
+        </ion-title>
+        <ion-title *ngIf="showMap">
+            Confime posición geográfica
+        </ion-title>
     </ion-toolbar>
-    <!-- 
-    <div *ngIf="showMap">
-        <ion-searchbar animation [(ngModel)]="search_value" type="search" placeholder="Ingrese su dirección" 
-            debounce="1500" (search)="searchByKeyword($event)" (ionChange)="searchPlace()">
-        </ion-searchbar>
-        <ion-list *ngIf="places && places.length > 0">
-            <ion-item *ngFor="let place of places" (touchstart)="selectPlace(place)">{{place.formatted_address}}</ion-item>
-        </ion-list>
-    </div>
-    -->
+    
 </ion-header>
 
 <ion-content *ngIf="showCityList">
@@ -47,7 +48,7 @@
                 </ion-item>
         </ion-list>
         <br>
-        <ion-segment color="secondary" formControlName="icon" [(ngModel)]="address.icon">
+        <ion-segment color="secondary" formControlName="icon" [(ngModel)]="address.icon" *ngIf="showAddressDetailField">
             <ion-segment-button value="home">
                 <ion-icon name="home"></ion-icon>
                 <ion-label>Casa</ion-label>
@@ -65,7 +66,7 @@
                 <ion-label>Oficina</ion-label>
             </ion-segment-button>
         </ion-segment>
-        <ion-item *ngIf="showAddressDetailField" >
+        <ion-item *ngIf="showAddressDetailField">
             <ion-label position="stacked">Complemento Dirección</ion-label>
                 <ion-input formControlName="detail" type="text" placeholder="Apartamento/Piso/Edificio" [(ngModel)]="address.detail"
                     [class.invalid]="!addressForm.controls['detail'].valid && addressForm.controls['detail'].touched">
@@ -82,11 +83,6 @@
 </ion-content>
 
 <ion-content  class="map-page">
-    <ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="showMap">
-        <ion-fab-button>
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
     <div style="height: 100%; width: 100%" #mapCanvas id="map_canvas">
     </div>
 </ion-content>

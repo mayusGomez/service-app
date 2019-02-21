@@ -9,7 +9,7 @@ import {
 
 import { AuthService } from '../services/auth.service';
 import { UserProfile } from '../models/user-profile';
-import { ResponseObject } from '../models/generic';
+import { ResponseObject, Address } from '../models/generic';
 
 
 @Injectable({
@@ -34,13 +34,27 @@ export class UserDataService {
     };
 
     try{
-      await this.db.doc(`userProfile/${userProfile.id}`).set({...userProfile});
+      await this.db.doc(`userProfile/${userProfile.id}`).update({...userProfile});
       return response;
     } catch(err){
       response['errCode'] = -1;
       response['errMsg'] = 'Error en la actualización de los datos';
       return response;
     }
+  }
+
+  updUserProfileAddAddress(id: string= this.authServ.userUid, address: Address): Promise<void> {
+    const userPofileRef: firebase.firestore.DocumentReference = this.db.doc(
+      `/userProfile/${id}`
+    ).ref;
+
+    return this.db.firestore.runTransaction(transaction => {
+      return transaction.get(userPofileRef).then(profileDoc => {
+        let currentAddress: Address[] = profileDoc.data().address;
+        currentAddress.unshift(address);
+        transaction.update(userPofileRef, { address: currentAddress });
+      });
+    });
   }
 
 }

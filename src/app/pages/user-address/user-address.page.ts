@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { UserDataService } from '../../services/user-data.service';
 import { UserProfile } from '../../models/user-profile';
@@ -15,6 +16,7 @@ export class UserAddressPage implements OnInit, OnDestroy {
   public userProfile: UserProfile;
 
   constructor(
+    private router: Router ,
     private userDataServices: UserDataService
   ) {
     this.userProfile = {
@@ -34,6 +36,10 @@ export class UserAddressPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.userProfileSubs$.unsubscribe();
+  }
+
+  addAddress(){
+    this.router.navigateByUrl(`/user-address/add-address/${this.userProfile.id}`);
   }
 
 }

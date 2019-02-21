@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 
 import { UserDataService } from '../../services/user-data.service';
 import { AuthService } from '../../services/auth.service';
@@ -30,7 +29,6 @@ export class UserAcountPage implements OnInit, OnDestroy {
     public userService: UserDataService,
     public authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private toastController: ToastController
   ) {
     this.userProfile = {
@@ -82,9 +80,6 @@ export class UserAcountPage implements OnInit, OnDestroy {
       });
       toast.present();
     }
-
   }
-
-
 
 }

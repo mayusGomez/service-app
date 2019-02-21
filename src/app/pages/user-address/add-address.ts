@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone  } from '@angular/core
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 import { Address } from '../../models/generic';
 import { City } from '../../models/city';
 import { CityService } from '../../services/city.service';
+import { UserDataService } from '../../services/user-data.service'
 
 declare var google: any;
 enum ViewOptionEnum {
@@ -18,12 +19,13 @@ enum ViewOptionEnum {
 @Component({
   selector: 'add-address',
   templateUrl: './add-address.html',
-  styleUrls: [],
+  styleUrls: ['add-address.scss'],
 })
 export class AddAddress implements OnInit {
 
     @ViewChild('mapCanvas') mapElement: ElementRef;
     public addressForm: FormGroup;
+    userId: string;
 
     citiesList: Observable<City[]>;
     countryId = 'GT';
@@ -47,11 +49,14 @@ export class AddAddress implements OnInit {
     map: any;
 
     constructor(
-        private router: Router ,
+        private router: Router,
         public zone: NgZone,
         public cityService: CityService,
         public formBuilder: FormBuilder,
-        public alertController: AlertController
+        public alertController: AlertController,
+        private loadingController: LoadingController,
+        private userDataService: UserDataService,
+        private toastController: ToastController
     ) {
         this.showCityList = true;
         this.showAdress = false;
@@ -135,7 +140,6 @@ export class AddAddress implements OnInit {
         this.address.geolocation['lat'] = place.geometry.location.lat();
         this.address.geolocation['lng'] = place.geometry.location.lng();
 
-        
         this.mapMarker = new google.maps.Marker({
             position: {
                 lat: place.geometry.location.lat(),
@@ -193,10 +197,33 @@ export class AddAddress implements OnInit {
     setAddress() {
         this.address.description = this.search_value;
         this.toggleView(ViewOptionEnum.map);
-        // console.log(this.mapMarker);
-        // console.log(`Direccion: ${ JSON.stringify(this.address)}`);
         this.presentAlert();
         this.mapMarker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+
+    async exitWithoutSave(){
+        const alert = await this.alertController.create({
+            header: 'Salir sin guardar',
+            message: 'Realmente <strong>NO quiere almacenar su dirección?</strong>!!!',
+            buttons: [
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+                cssClass: 'secondary',
+                handler: (blah) => {
+                  console.log('Confirm Cancel: blah');
+                }
+              }, {
+                text: 'Si, no quiero',
+                handler: () => {
+                  console.log('Confirm Okay');
+                  this.router.navigateByUrl('/user-address');
+                }
+              }
+            ]
+          });
+      
+          await alert.present();
     }
 
     async presentAlert() {
@@ -209,4 +236,35 @@ export class AddAddress implements OnInit {
         await alert.present();
     }
 
+    async saveAddres() {
+        let toast: any;
+        const loading = await this.loadingController.create({
+          message: 'Adicionando direccion',
+          duration: 10000
+        });
+        loading.present();
+
+        try{
+            await this.userDataService.updUserProfileAddAddress(undefined, this.address);
+            console.log('guarda');
+            loading.dismiss();
+            const toast = await this.toastController.create({
+                message: 'Dirección almacenada con exito',
+                duration: 4000
+            });
+            toast.present();
+            this.router.navigateByUrl('/user-address');
+            
+        } catch (err) {
+            console.log('Excepcion e:' + err);
+            loading.dismiss();
+            const toast = await this.toastController.create({
+                message: 'Error en el almacenamiento de la dirección',
+                duration: 4000
+            });
+            toast.present();
+            this.toggleView(ViewOptionEnum.address);
+        }
+
+    }
 }
