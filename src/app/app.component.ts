@@ -47,7 +47,7 @@ export class AppComponent {
     });
   }
 
-  closeSession(){
+  closeSession() {
     this.authService.logoutUser();
   }
 }
