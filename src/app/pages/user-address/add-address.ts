@@ -60,6 +60,7 @@ export class AddAddress implements OnInit {
         this.showAddressDetailField = false;
 
         this.addressForm = this.formBuilder.group({
+            icon: ['', Validators.required],
             address: ['', Validators.required],
             detail: ['', Validators.required]
         });
@@ -113,7 +114,7 @@ export class AddAddress implements OnInit {
     loadMap() {
         this.map = new google.maps.Map(this.mapElement.nativeElement, {
             center: new google.maps.LatLng( this.citySelected.center_point.lat , this.citySelected.center_point.lng),
-            zoom: 12,
+            zoom: 10,
             mapTypeControlOptions: {
                 mapTypeIds: ['coordinate'],
             },
@@ -129,11 +130,12 @@ export class AddAddress implements OnInit {
         this.showAddressDetailField = true;
 
         this.map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
+        this.map.setZoom(16);
 
         this.address.geolocation['lat'] = place.geometry.location.lat();
         this.address.geolocation['lng'] = place.geometry.location.lng();
 
-        this.map.setZoom(15);
+        
         this.mapMarker = new google.maps.Marker({
             position: {
                 lat: place.geometry.location.lat(),
@@ -145,29 +147,18 @@ export class AddAddress implements OnInit {
         });
 
         this.map.addListener('click', (event) => {
-            this.mapMarker.setMap(null);
+            if (this.mapMarker){
+                this.mapMarker.setMap(null);
+            }
             this.mapMarker = new google.maps.Marker({
                 position: event.latLng,
                 map: this.map,
-                animation: google.maps.Animation.DROP,
                 draggable: true
             });
             // console.log('event click');
             this.address.geolocation.lat = event.latLng.lat;
             this.address.geolocation.lng = event.latLng.lng;
         });
-        // this.map.addListener('touchstart', (event) => {
-        //     this.mapMarker.setMap(null);
-        //     this.mapMarker = new google.maps.Marker({
-        //         position: event.latLng,
-        //         map: this.map,
-        //         animation: google.maps.Animation.DROP,
-        //         draggable: true
-        //     });
-        //     // console.log('event touchstart');
-        //     this.address.geolocation.lat = event.latLng.lat;
-        //     this.address.geolocation.lng = event.latLng.lng;
-        // });
     }
 
     searchPlace () {
@@ -205,6 +196,7 @@ export class AddAddress implements OnInit {
         // console.log(this.mapMarker);
         // console.log(`Direccion: ${ JSON.stringify(this.address)}`);
         this.presentAlert();
+        this.mapMarker.setAnimation(google.maps.Animation.BOUNCE);
     }
 
     async presentAlert() {

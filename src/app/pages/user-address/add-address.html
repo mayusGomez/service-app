@@ -29,9 +29,7 @@
 
 <ion-content *ngIf="showAdress">
     <br>
-    <br>
-    <br>
-    <form [formGroup]="addressForm">
+    <form [formGroup]="addressForm" >
         <ion-item>
             <ion-label position="stacked">Direccion</ion-label>
                 <ion-input formControlName="address" type="text" placeholder="Ingrese su dirección" [(ngModel)]="search_value" 
@@ -49,6 +47,24 @@
                 </ion-item>
         </ion-list>
         <br>
+        <ion-segment color="secondary" formControlName="icon" [(ngModel)]="address.icon">
+            <ion-segment-button value="home">
+                <ion-icon name="home"></ion-icon>
+                <ion-label>Casa</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="heart">
+                <ion-icon name="heart"></ion-icon>
+                <ion-label>Amor</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="cafe">
+                <ion-icon name="cafe"></ion-icon>
+                <ion-label>Cafe</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="laptop">
+                <ion-icon name="laptop"></ion-icon>
+                <ion-label>Oficina</ion-label>
+            </ion-segment-button>
+        </ion-segment>
         <ion-item *ngIf="showAddressDetailField" >
             <ion-label position="stacked">Complemento Dirección</ion-label>
                 <ion-input formControlName="detail" type="text" placeholder="Apartamento/Piso/Edificio" [(ngModel)]="address.detail"
@@ -59,7 +75,6 @@
                     addressForm.controls['detail'].touched">
             <ion-label>Por favor ingrese su dirección</ion-label>
         </ion-item>
-        <br>
         <ion-button *ngIf="showAddressDetailField" (click)="setAddress()" expand="block" [disabled]="!addressForm.valid">
             Continuar
         </ion-button>

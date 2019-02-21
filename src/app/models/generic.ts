@@ -35,4 +35,5 @@ export interface Address {
         lng: number
     };
     name?: string;
+    icon?: string;
 }
