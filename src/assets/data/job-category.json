@@ -1,0 +1,116 @@
+[ 
+    {
+        "id": "PAINT",
+        "name": {
+            "es": "Pintura"
+        },
+        "card_image": "/assets/shapes.svg",
+        "job_subtype":[
+            {
+                "id": "PAINT__PAINT",
+                "name":{
+                    "es": "Pintura"
+                }
+            },
+            {
+                "id": "PAINT__HUMIDITY",
+                "name":{
+                    "es": "Humedad"
+                }
+            }
+        ]
+    },
+    {
+        "id": "LOCKSMITH",
+        "name": {
+            "es": "Cerrajería"
+        },
+        "card_image": "/assets/shapes.svg",
+        "job_subtype":[
+            {
+                "id": "LOCKSMITH__LOCKSMITH",
+                "name": {
+                    "es": "Cerrajería"
+                }
+            },
+            {
+                "id": "LOCKSMITH__CAR",
+                "name": {
+                    "es": "Vehículo"
+                }
+            },
+            {
+                "id": "LOCKSMITH__HOME",
+                "name": {
+                    "es": "Casa"
+                }
+            },
+            {
+                "id": "LOCKSMITH__KEYS",
+                "name": {
+                    "es": "Llaves"
+                }
+            }
+        ]
+    },
+    {
+        "id": "ELECTRICAL",
+        "name": {
+            "es": "Electricidad"
+        },
+        "card_image": "/assets/shapes.svg",
+        "job_subtype":[
+            {
+                "id": "ELECTRICAL__ELECTRICAL",
+                "name":{
+                    "es": "Electricidad"
+                }
+            },
+            {
+                "id": "ELECTRICAL__INSTALLATIONS",
+                "name":{
+                    "es": "Instalaciones"
+                }
+            },
+            {
+                "id": "ELECTRICAL__ILLUMINATION",
+                "name":{
+                    "es": "Iluminación"
+                }
+            }
+        ]
+    },
+    {
+        "id": "ELECTRONIC",
+        "name": {
+            "es": "Electrónica"
+        },
+        "card_image": "/assets/shapes.svg",
+        "job_subtype":[
+            {
+                "id": "ELECTRONIC__COMPUTER",
+                "name": {
+                    "es": "Computadoras"
+                }
+            },
+            {
+                "id": "ELECTRONIC__PRINTER",
+                "name":{
+                    "es": "Impresoras"
+                }
+            },
+            {
+                "id": "ELECTRONIC__WASHING_MACHINE",
+                "name":{
+                    "es": "Lavadora"
+                }
+            },
+            {
+                "id": "ELECTRONIC__FRIDGE",
+                "name":{
+                    "es": "Nevera"
+                }
+            }
+        ]
+    }
+]

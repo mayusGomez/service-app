@@ -1,3 +1,5 @@
+import { JobCategory } from './job-category';
+
 enum CountriesId {
     COL,
     GTM
@@ -12,4 +14,5 @@ export interface Country {
     currency_code: string;
     currency_decimal: number;
     time_zone_capital: string;
+    job_categories: JobCategory[]
 }
