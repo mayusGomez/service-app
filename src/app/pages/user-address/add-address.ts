@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import * as firebase                      from 'firebase/app';
 
 import { Address } from '../../models/generic';
 import { City } from '../../models/city';
@@ -137,8 +138,10 @@ export class AddAddress implements OnInit {
         this.map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
         this.map.setZoom(16);
 
-        this.address.geolocation['lat'] = place.geometry.location.lat();
-        this.address.geolocation['lng'] = place.geometry.location.lng();
+        this.address.geolocation = new firebase.firestore.GeoPoint(
+            Number(place.geometry.location.lat()),
+            Number(place.geometry.location.lng())
+        );
 
         this.mapMarker = new google.maps.Marker({
             position: {
@@ -160,8 +163,10 @@ export class AddAddress implements OnInit {
                 draggable: true
             });
             // console.log('event click');
-            this.address.geolocation.lat = event.latLng.lat;
-            this.address.geolocation.lng = event.latLng.lng;
+            this.address.geolocation = new firebase.firestore.GeoPoint(
+                Number(place.geometry.location.lat()),
+                Number(place.geometry.location.lng())
+            );
         });
     }
 

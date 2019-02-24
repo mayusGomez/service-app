@@ -12,7 +12,7 @@ const routes: Routes = [
     path: '',
     component: UserAddressPage
   },
-  { path: 'add-address/:id', component: AddAddress },
+  { path: 'add-address/', component: AddAddress },
 ];
 
 @NgModule({

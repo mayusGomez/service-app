@@ -30,10 +30,7 @@ export interface Address {
     description?: string;
     detail?: string;
     citi_zone?: string;
-    geolocation?: {
-        lat: number,
-        lng: number
-    };
+    geolocation?: object;
     name?: string;
     icon?: string;
 }

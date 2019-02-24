@@ -57,4 +57,20 @@ export class UserDataService {
     });
   }
 
+  delUserProfileAddAddress(id: string= this.authServ.userUid, addressToDel: Address): Promise<void> {
+    const userPofileRef: firebase.firestore.DocumentReference = this.db.doc(
+      `/userProfile/${id}`
+    ).ref;
+
+    return this.db.firestore.runTransaction(transaction => {
+      return transaction.get(userPofileRef).then(profileDoc => {
+        let currentAddress: Address[] = profileDoc.data().address;
+        currentAddress = currentAddress.filter( (address, index, array)=>{
+          return address.description !== addressToDel.description || address.country_id !== addressToDel.country_id;
+        }); 
+        transaction.update(userPofileRef, { address: currentAddress });
+      });
+    });
+  }
+
 }
